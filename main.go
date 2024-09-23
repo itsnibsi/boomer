@@ -1,4 +1,4 @@
-package boomer
+package main
 
 import (
 	"fmt"
@@ -11,6 +11,12 @@ func main() {
 	log.Print("starting server...")
 	http.HandleFunc("/", handler)
 
+	host := os.Getenv("HOST")
+	if host == "" {
+		host = "127.0.0.1"
+		log.Printf("defaulting to host %s", host)
+	}
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
@@ -18,7 +24,7 @@ func main() {
 	}
 
 	log.Printf("listening on port %s", port)
-	if err := http.ListenAndServe(":"+port, nil); err != nil {
+	if err := http.ListenAndServe(host+":"+port, nil); err != nil {
 		log.Fatal(err)
 	}
 }
